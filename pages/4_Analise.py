@@ -21,7 +21,6 @@ brent_data = get_brent_data()
 
 # Dicionário de eventos com períodos correspondentes
 eventos = {
-    "Todos": (brent_data['Date'].min(), brent_data['Date'].max()),
     "Invasão do Kuwait pelo Iraque (1990)": ("1990-08-02", "1991-03-02"),
     "Invasão do Iraque pelos EUA (2003)": ("2003-03-20", "2003-04-30"),
     "Colapso do Lehman Brothers (2008)": ("2008-09-15", "2008-12-31"),
@@ -31,7 +30,8 @@ eventos = {
     "Acordo de Corte de Produção da OPEP (2017 em diante)": ("2017-01-01", brent_data['Date'].max().strftime("%Y-%m-%d")),
     "Reimposição de Sanções Econômicas ao Irã (2018–2019)": ("2018-05-08", "2019-12-31"),
     "Ataques a Petroleiros e Tensões Militares (2019)": ("2019-05-01", "2019-12-31"),
-    "Lockdowns Globais devido à COVID-19 (2020–2021)": ("2020-03-01", "2021-12-31")
+    "Lockdowns Globais devido à COVID-19 (2020–2021)": ("2020-03-01", "2021-12-31"),
+    "Onze de Setembro (2001)": ("2001-09-11", "2001-09-11")
 }
 
 # Sidebar para seleção de eventos
@@ -63,3 +63,14 @@ st.write(f"**Menor Preço:** ${preco_minimo:.2f}")
 # Gráfico interativo
 fig = px.line(dados_filtrados, x='Date', y='Close', title=f"Preço do Petróleo Brent durante {evento_selecionado}")
 st.plotly_chart(fig, use_container_width=True)
+
+# 🔹 Criando os botões de navegação para ir para outra página ou voltar
+col1, col2 = st.columns(2)
+
+if col1.button("⬅ Voltar para Início"):
+    st.session_state["pagina"] = "main.py"
+    st.rerun()
+
+if col2.button("➡ Próxima: Objetivo"):
+    st.session_state["pagina"] = "pages/2_Objetivo.py"
+    st.rerun()
