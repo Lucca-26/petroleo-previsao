@@ -9,26 +9,60 @@ st.set_page_config(page_title="Modelo", page_icon="📈")
 
 st.title("📈 Modelo de Previsão")
 
-# Coletar os dados diretamente do Yahoo Finance
+# 🔹 Coletar os dados do Yahoo Finance
 brent_data = yf.Ticker("BZ=F").history(period="max")
 brent_data.reset_index(inplace=True)
 
-# Treinar o modelo de Regressão Linear
-brent_data['Target'] = brent_data['Close'].shift(-1)
-X = brent_data[['Open', 'High', 'Low', 'Close']].dropna()
-y = brent_data['Target'].dropna()
+# 🔹 Remover fuso horário, se existir
+if brent_data['Date'].dtype == "datetime64[ns, America/New_York]":
+    brent_data['Date'] = brent_data['Date'].dt.tz_convert(None)
 
+# 🔹 Converter a coluna para exibir apenas a data (removendo a hora)
+brent_data['Date'] = brent_data['Date'].dt.date
+
+# 🔹 Identificar a última data disponível no dataset
+last_date = brent_data["Date"].max()
+
+# 🔹 Criar um filtro interativo com `slider` para ajustar o período da previsão
+days_to_predict = st.sidebar.slider("Número de dias para prever:", min_value=1, max_value=30, value=7)
+
+# 🔹 Criar variável target (preço de fechamento do próximo dia)
+brent_data['Target'] = brent_data['Close'].shift(-1)
+
+# 🔹 Remover linhas com valores NaN antes de separar X e y
+brent_data.dropna(inplace=True)
+
+# 🔹 Criar variáveis de entrada (X) e saída (y)
+X = brent_data[['Open', 'High', 'Low', 'Close']]
+y = brent_data['Target']
+
+# 🔹 Treinar modelo de Regressão Linear
 model = LinearRegression()
 model.fit(X, y)
 
-# Previsão para os próximos 7 dias
-last_7_days = X.iloc[-7:]
-predictions = model.predict(last_7_days)
+# 🔹 Previsão para os próximos N dias (a partir do último dia disponível)
+future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1), periods=days_to_predict).date  # Apenas data
 
-# Exibir previsões
-st.write("### Previsão para os Próximos 7 Dias")
-st.write(predictions)
+# Criar DataFrame fictício baseado no último dia do histórico
+last_row = X.iloc[-1].values.reshape(1, -1)  # Última linha do histórico como base
+future_predictions = []
 
-# Gráfico interativo
-fig = px.line(brent_data, x="Date", y="Close", title="Previsão do Modelo Linear")
+for _ in range(days_to_predict):
+    pred = model.predict(last_row)[0]  # Fazer a previsão
+    future_predictions.append(pred)
+    
+    # Atualizar a última linha simulando uma continuidade dos dados
+    last_row = np.array([[last_row[0][1], last_row[0][2], last_row[0][3], pred]])  # Shiftando valores
+
+# Criar DataFrame para exibir as previsões com as datas futuras
+df_predictions = pd.DataFrame({'Data': future_dates, 'Previsão': future_predictions})
+
+# 🔹 Exibir previsões formatadas
+st.write(f"### Previsão para os Próximos {days_to_predict} Dias")
+st.dataframe(df_predictions.set_index("Data"), width=500)
+
+# 🔹 Gráfico interativo com previsão destacada em laranja
+fig = px.line(brent_data, x="Date", y="Close", title="Preço Histórico e Previsão do Petróleo Brent", labels={'Close': 'Preço'})
+fig.add_scatter(x=df_predictions["Data"], y=df_predictions["Previsão"], mode="lines", name="Previsão", line=dict(color="orange", width=2))
+
 st.plotly_chart(fig)
