@@ -76,7 +76,7 @@ with col2:
     # Botão de referências centralizado abaixo dos outros
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🔍 Referências"):
-        st.switch_page("pages/7_Referencias.py")
+        st.switch_page("pages/7_Referências.py")
 
 # Rodapé com nomes da equipe alinhado à direita
 st.markdown(
