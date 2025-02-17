@@ -1,10 +1,9 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 
-# Configuração da página
+# Esconder o menu lateral
 st.set_page_config(page_title="Tech Challenge", layout="wide")
 
-# Centralizar título e subtítulo
+# Centralizar o título principal
 st.markdown(
     """
     <h1 style="text-align: center; color: #1E3A8A;">
@@ -17,40 +16,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Centralizar imagem
-st.image("images/petroleo.png", width=300)
+# Adicionar imagem centralizada
+st.image("images/petroleo.png", width=400)
 
-# Espaçamento
-st.markdown("<br>", unsafe_allow_html=True)
-
-# Criar menu de navegação com ícones
-selected = option_menu(
-    menu_title=None,
-    options=["Introdução", "Objetivo", "Metodologia", "Análise", "Conclusão", "Referências"],
-    icons=["house", "bullseye", "tools", "bar-chart", "check-circle", "book"],
-    menu_icon="cast",
-    default_index=0,
-    orientation="horizontal"
-)
-
-# Redirecionamento para páginas
-if selected == "Introdução":
-    st.switch_page("pages/1_Introdução.py")
-elif selected == "Objetivo":
-    st.switch_page("pages/2_Objetivo.py")
-elif selected == "Metodologia":
-    st.switch_page("pages/3_Metodologia.py")
-elif selected == "Análise":
-    st.switch_page("pages/4_Analise.py")
-elif selected == "Conclusão":
-    st.switch_page("pages/5_Conclusão.py")
-elif selected == "Referências":
-    st.switch_page("pages/6_Referências.py")
-
-# Rodapé com nomes da equipe alinhado à direita
+# Exibir informações da equipe com layout estruturado
 st.markdown(
     """
-    <div style="position: fixed; bottom: 10px; right: 20px; text-align: right; font-size: 14px;">
+    <div style="text-align: center; font-size: 18px; margin-top: 20px;">
         <b>Equipe:</b><br>
         Francisco das Chagas Alcântara Júnior – RM 357554<br>
         Geovana Façanha da Silva – RM357215<br>
@@ -59,3 +31,28 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# Criar botões alinhados no centro
+st.markdown("<br>", unsafe_allow_html=True)  # Espaço entre os elementos
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    if st.button("Introdução", use_container_width=True):
+        st.switch_page("pages/1_Introdução.py")
+with col2:
+    if st.button("Objetivo", use_container_width=True):
+        st.switch_page("pages/2_Objetivo.py")
+with col3:
+    if st.button("Metodologia", use_container_width=True):
+        st.switch_page("pages/3_Metodologia.py")
+
+col4, col5, col6 = st.columns(3)
+with col4:
+    if st.button("Análise", use_container_width=True):
+        st.switch_page("pages/4_Analise.py")
+with col5:
+    if st.button("Conclusão", use_container_width=True):
+        st.switch_page("pages/5_Conclusão.py")
+with col6:
+    if st.button("Referências", use_container_width=True):
+        st.switch_page("pages/6_Referências.py")
