@@ -1,59 +1,61 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
 
 # Configuração da página
-st.set_page_config(page_title="Previsão do Petróleo", page_icon="⛽", layout="wide")
+st.set_page_config(page_title="Tech Challenge", layout="wide")
 
-# Esconder menu lateral e rodapé
-hide_menu_style = """
-    <style>
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        button {
-            font-size: 20px !important;
-            padding: 15px !important;
-            width: 100% !important;
-            border-radius: 10px !important;
-        }
-    </style>
-"""
-st.markdown(hide_menu_style, unsafe_allow_html=True)
+# Centralizar título e subtítulo
+st.markdown(
+    """
+    <h1 style="text-align: center; color: #1E3A8A;">
+        FIAP PÓS TECH – DATA ANALYTICS, 2024
+    </h1>
+    <h3 style="text-align: center; color: #1E3A8A;">
+        Tech Challenge Fase 4 | FIAP | Data Analytics
+    </h3>
+    """,
+    unsafe_allow_html=True
+)
 
-# Título centralizado
-st.markdown("<h1 style='text-align: center;'>⛽ Previsão do Petróleo</h1>", unsafe_allow_html=True)
-st.write("<h4 style='text-align: center;'>Bem-vindo ao painel interativo de análise da previsão do petróleo Brent.</h4>", unsafe_allow_html=True)
+# Centralizar imagem
+st.image("images/petroleo.png", width=300)
 
-# Exibir a imagem centralizada com tamanho fixo
-col_img, col_space, col_img2 = st.columns([4, 3, 2])
+# Espaçamento
+st.markdown("<br>", unsafe_allow_html=True)
 
-with col_space:
-    st.image("images/petroleo.png", width=200)  # Ajuste o tamanho conforme necessário
+# Criar menu de navegação com ícones
+selected = option_menu(
+    menu_title=None,
+    options=["Introdução", "Objetivo", "Metodologia", "Análise", "Conclusão", "Referências"],
+    icons=["house", "bullseye", "tools", "bar-chart", "check-circle", "book"],
+    menu_icon="cast",
+    default_index=0,
+    orientation="horizontal"
+)
 
-st.write("### 🚀 Navegue pelas seções:")
+# Redirecionamento para páginas
+if selected == "Introdução":
+    st.switch_page("pages/1_Introdução.py")
+elif selected == "Objetivo":
+    st.switch_page("pages/2_Objetivo.py")
+elif selected == "Metodologia":
+    st.switch_page("pages/3_Metodologia.py")
+elif selected == "Análise":
+    st.switch_page("pages/4_Analise.py")
+elif selected == "Conclusão":
+    st.switch_page("pages/5_Conclusão.py")
+elif selected == "Referências":
+    st.switch_page("pages/6_Referências.py")
 
-# Criando layout com colunas para alinhar os botões
-col1, col2, col3 = st.columns(3)
-
-# Primeira linha de botões
-with col1:
-    if st.button("📖 Introdução"):
-        st.switch_page("pages/1_Introdução.py")
-
-    if st.button("📊 Análise"):
-        st.switch_page("pages/4_Analise.py")
-
-with col2:
-    if st.button("🎯 Objetivo"):
-        st.switch_page("pages/2_Objetivo.py")
-
-    if st.button("📡 Modelo"):
-        st.switch_page("pages/5_Modelo.py")
-
-with col3:
-    if st.button("🛠 Metodologia"):
-        st.switch_page("pages/3_Metodologia.py")
-
-    if st.button("📚 Conclusão"):
-        st.switch_page("pages/6_Conclusão.py")
-
-    if st.button("🔍 Referências"):
-        st.switch_page("pages/7_Referências.py")
+# Rodapé com nomes da equipe alinhado à direita
+st.markdown(
+    """
+    <div style="position: fixed; bottom: 10px; right: 20px; text-align: right; font-size: 14px;">
+        <b>Equipe:</b><br>
+        Francisco das Chagas Alcântara Júnior – RM 357554<br>
+        Geovana Façanha da Silva – RM357215<br>
+        Luciana Conceição Ferreira – RM357220
+    </div>
+    """,
+    unsafe_allow_html=True
+)
