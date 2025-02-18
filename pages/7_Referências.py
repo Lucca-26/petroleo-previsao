@@ -10,3 +10,10 @@ st.write(
     3. Crise de 2008: [Publicação no IMF](https://www.imf.org/).
     """
 )
+
+# Botões de navegação
+col1 = st.columns([1])[0]  # Acessar o primeiro elemento da lista
+
+with col1:
+    if st.button("⬅ Ir para Menu"):
+        st.switch_page("main.py")

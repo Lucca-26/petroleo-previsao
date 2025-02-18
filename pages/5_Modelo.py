@@ -17,9 +17,6 @@ brent_data.reset_index(inplace=True)
 if brent_data['Date'].dtype == "datetime64[ns, America/New_York]":
     brent_data['Date'] = brent_data['Date'].dt.tz_convert(None)
 
-# 🔹 Converter a coluna para exibir apenas a data (removendo a hora)
-brent_data['Date'] = brent_data['Date'].dt.date
-
 # 🔹 Identificar a última data disponível no dataset
 last_date = brent_data["Date"].max()
 
@@ -41,7 +38,7 @@ model = LinearRegression()
 model.fit(X, y)
 
 # 🔹 Previsão para os próximos N dias (a partir do último dia disponível)
-future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1), periods=days_to_predict).date  # Apenas data
+future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1), periods=days_to_predict)
 
 # Criar DataFrame fictício baseado no último dia do histórico
 last_row = X.iloc[-1].values.reshape(1, -1)  # Última linha do histórico como base
@@ -59,10 +56,23 @@ df_predictions = pd.DataFrame({'Data': future_dates, 'Previsão': future_predict
 
 # 🔹 Exibir previsões formatadas
 st.write(f"### Previsão para os Próximos {days_to_predict} Dias")
+df_predictions['Previsão'] = df_predictions['Previsão'].apply(lambda x: f"${x:.2f}")  # Adicionar símbolo de dólar e formatar
 st.dataframe(df_predictions.set_index("Data"), width=500)
 
 # 🔹 Gráfico interativo com previsão destacada em laranja
 fig = px.line(brent_data, x="Date", y="Close", title="Preço Histórico e Previsão do Petróleo Brent", labels={'Close': 'Preço'})
-fig.add_scatter(x=df_predictions["Data"], y=df_predictions["Previsão"], mode="lines", name="Previsão", line=dict(color="orange", width=2))
+fig.update_traces(name='Histórico', selector=dict(name='Close'))  # Renomear a linha do histórico
+fig.add_scatter(x=df_predictions["Data"], y=df_predictions["Previsão"].str.replace('$', '').astype(float), mode="lines", name="Previsão", line=dict(color="orange", width=2))
 
 st.plotly_chart(fig)
+
+# Botões de navegação
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    if st.button("⬅ Voltar para Análise"):
+        st.switch_page("main.py")
+
+with col2:
+    if st.button("➡ Próximo"):
+        st.switch_page("pages/6_Conclusão.py")

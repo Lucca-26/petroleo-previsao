@@ -1,13 +1,36 @@
 import streamlit as st
+from PIL import Image
+import os
 
 # Esconder o menu lateral e configurar a página
 st.set_page_config(page_title="Tech Challenge", layout="wide")
+
+# CSS para remover a barra de rolagem
+st.markdown(
+    """
+    <style>
+        html, body {
+            overflow: hidden !important;
+            height: 100%;
+            margin: 0;
+        }
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: auto;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Centralizar o título principal
 st.markdown(
     """
     <h1 style="text-align: center; color: #1E3A8A;">
-        FIAP PÓS TECH – DATA ANALYTICS, 2024
+        FIAP PÓS TECH – DATA ANALYTICS, 2025
     </h1>
     <h3 style="text-align: center; color: #1E3A8A;">
         Tech Challenge Fase 4 | FIAP | Data Analytics
@@ -15,19 +38,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-# Centralizar imagem com CSS
-st.markdown(
-    """
-    <div style="text-align: center;">
-        <img src="images/petroleo.png" width="300">
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-# Criar espaçamento entre a imagem e os botões
-st.markdown("<br><br>", unsafe_allow_html=True)
 
 # Criar título da seção de botões
 st.markdown("<h3 style='text-align: center;'>🚀 Navegue pelas seções:</h3>", unsafe_allow_html=True)
@@ -56,7 +66,7 @@ with col2:
         if st.button("📖 Introdução"):
             st.switch_page("pages/1_Introdução.py")
 
-        if st.button("📊 Análise"):
+        if st.button("📊 Análise e Insights"):
             st.switch_page("pages/4_Analise.py")
 
     with col_btn2:
