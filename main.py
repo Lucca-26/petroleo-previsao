@@ -92,7 +92,7 @@ with col2:
 st.markdown(
     """
     <div style="position: fixed; bottom: 10px; right: 20px; text-align: right; font-size: 14px;">
-        <b>Equipe:</b><br>
+        <b>Grupo 9 | 6DTAT:</b><br>
         Francisco das Chagas Alcântara Júnior – RM 357554<br>
         Geovana Façanha da Silva – RM357215<br>
         Luciana Conceição Ferreira – RM357220
