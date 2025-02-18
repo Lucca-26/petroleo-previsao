@@ -34,6 +34,8 @@ Para o desenvolvimento deste projeto, utilizamos as seguintes ferramentas:
 - **Controle de Versão:**
     - **Git:** Sistema de controle de versão distribuído, utilizado para gerenciar as alterações no código e colaborar com outros desenvolvedores.
     - **GitHub:** Plataforma de hospedagem de código Git, utilizada para armazenar e compartilhar o código do projeto.
+    - **Git Bash:** Ferramenta de linha de comando que fornece uma interface Git no sistema operacional Windows.
+        - **Explicação:** O Git Bash é utilizado para executar comandos Git no Windows, permitindo o controle de versão do código, a criação de branches, o commit de alterações e a sincronização com repositórios remotos no GitHub.
 
 - **Implantação (Deploy):**
     - **Streamlit Cloud:** Plataforma para implantar aplicativos Streamlit na nuvem, utilizada para disponibilizar o projeto online.
@@ -149,9 +151,9 @@ A implantação do projeto envolveu a criação de um aplicativo Streamlit inter
 
 - **Passos para Executar o Projeto Localmente:**
     1. **Clonar o Repositório:**
-       - Clone o repositório Git para o seu computador utilizando o seguinte comando:
+       - **Usando Git Bash:** Abra o Git Bash e navegue até o diretório onde você deseja salvar o projeto. Em seguida, clone o repositório Git para o seu computador utilizando o seguinte comando:
          ```bash
-         git clone https://github.com/SEU_USUARIO/petroleo-previsao.git
+         git clone https://github.com/Lucca-26/petroleo-previsao.git
          ```
     2. **Criar um Ambiente Virtual:**
        - Crie um ambiente virtual Python para isolar as dependências do projeto:
