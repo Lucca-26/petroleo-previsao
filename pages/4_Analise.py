@@ -2,22 +2,38 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import plotly.express as px
+import time
 
 # Configuração da página
 st.set_page_config(page_title="Análise dos Eventos no Preço do Petróleo Brent e Insights", page_icon="📊")
 
 st.title("📊 Análise dos Eventos no Preço do Petróleo Brent e Insights")
 
-# Função para obter dados históricos do Brent Crude Oil
+# Função para obter dados históricos do Brent Crude Oil com tratamento de rate limiting
 @st.cache_data
-def get_brent_data():
-    brent_data = yf.Ticker("BZ=F").history(period="max")
-    brent_data.reset_index(inplace=True)
-    brent_data['Date'] = brent_data['Date'].dt.date  # Remover a hora da coluna Date
-    return brent_data
+def get_brent_data(ticker="BZ=F", tentativas=3):
+    for i in range(tentativas):
+        try:
+            brent_data = yf.Ticker(ticker).history(period="max")
+            time.sleep(2)  # Pausa de 2 segundos entre as requisições
+            brent_data.reset_index(inplace=True)
+            brent_data['Date'] = brent_data['Date'].dt.date  # Remover a hora da coluna Date
+            return brent_data
+        except yf.exceptions.YFRateLimitError as e:
+            print(f"Tentativa {i+1}: Limite de taxa atingido para {ticker}. Esperando...")
+            time.sleep(60 * (i + 1))  # Espera progressivamente mais longa
+        except Exception as e:
+            print(f"Erro ao obter dados para {ticker}: {e}")
+            return None
+    print(f"Falha ao obter dados para {ticker} após {tentativas} tentativas.")
+    return None
 
 # Carregar dados
 brent_data = get_brent_data()
+
+if brent_data is None:
+    st.error("Falha ao carregar os dados do petróleo Brent. Tente novamente mais tarde.")
+    st.stop()
 
 # Dicionário de eventos com períodos correspondentes
 eventos = {
@@ -119,3 +135,14 @@ A análise dos dados e o contexto histórico mostram que a variação do preço 
 - A transição energética pode reduzir a demanda futuramente.
 - O mercado de petróleo é altamente especulativo e volátil.
 """)
+
+# Botões de navegação
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    if st.button("⬅ Ir para Menu"):
+        st.switch_page("main.py")
+
+with col2:
+    if st.button("➡ Próximo"):
+        st.switch_page("pages/5_Modelo.py")
